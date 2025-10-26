@@ -52,3 +52,40 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# VS/IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Rider / ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# OS junk
+*.DS_Store
+Thumbs.db
+
+# Docker
+**/.docker/
+*.pid
+
+# Publish output
+publish/
+app/publish/
+
+# Logs
+*.log
+logs/
+
+# Prevent committing local dev env files
+.env
+.env.*
+
+# Generated files
+*.Generated.cs
+
+# Redis local data
+redis-data/
