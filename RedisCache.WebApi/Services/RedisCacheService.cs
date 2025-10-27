@@ -133,7 +133,7 @@ public class RedisCacheService : ICacheService, IDisposable
             if (ep == null) return stats;
             var server = mux.GetServer(ep);
             var info = await server.InfoAsync();
-            var keyspace = info.FirstOrDefault(s => s.Key == "Keyspace").ToDictionary();
+            var keyspace = info.FirstOrDefault(s => s.Key == "Keyspace")?.ToDictionary() ?? new();
             // keyspace like db0:keys=10,expires=0,avg_ttl=0
             if (keyspace.TryGetValue("db0", out var db0))
             {

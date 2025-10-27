@@ -8,8 +8,8 @@ namespace RedisCache.WebApi.Services;
 public interface IProductService
 {
     Task<IEnumerable<Product>> GetAllAsync(CancellationToken ct = default);
-    Task<Product?> GetByIdAsync(Guid id, CancellationToken ct = default);
+    Task<Product?> GetByIdAsync(ProductId id, CancellationToken ct = default);
     Task<Product> CreateAsync(Product product, CancellationToken ct = default);
-    Task<bool> UpdateAsync(Guid id, Product product, CancellationToken ct = default);
-    Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
+    Task<bool> UpdateAsync(ProductId id, Product product, CancellationToken ct = default);
+    Task<bool> DeleteAsync(ProductId id, CancellationToken ct = default);
 }

@@ -5,6 +5,7 @@ using RedisCache.WebApi.Data;
 using RedisCache.WebApi.Repositories;
 using RedisCache.WebApi.Services;
 using System.Reflection;
+using StrongTypedCache.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
     opt.UseInMemoryDatabase("RedisCacheDb");
 });
+
+// StrongTypedCache registrations (L1 cache)
+// 2 minutes for individual products, 30 seconds for all-products to reduce stale list window
+builder.Services.AddStrongTypedInMemoryCache<ProductKey, RedisCache.WebApi.Models.Product>(absoluteExpirationTimeSec: 120);
+builder.Services.AddStrongTypedInMemoryCache<AllProductsKey, AllProductsCacheEntry>(absoluteExpirationTimeSec: 30);
 
 // Repository and services DI
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -104,15 +110,15 @@ internal static class SeedData
 {
     public static IEnumerable<RedisCache.WebApi.Models.Product> GetProducts() => new[]
     {
-        new RedisCache.WebApi.Models.Product { Name = "Laptop Pro 15", Category = "Computers", Price = 1999.99m, Description = "High-end laptop with 15-inch display" },
-        new RedisCache.WebApi.Models.Product { Name = "Mechanical Keyboard", Category = "Accessories", Price = 129.99m, Description = "RGB mechanical keyboard" },
-        new RedisCache.WebApi.Models.Product { Name = "Wireless Mouse", Category = "Accessories", Price = 49.99m, Description = "Ergonomic wireless mouse" },
-        new RedisCache.WebApi.Models.Product { Name = "4K Monitor", Category = "Monitors", Price = 399.99m, Description = "27-inch 4K UHD monitor" },
-        new RedisCache.WebApi.Models.Product { Name = "USB-C Hub", Category = "Accessories", Price = 59.99m, Description = "7-in-1 USB-C hub" },
-        new RedisCache.WebApi.Models.Product { Name = "Noise Cancelling Headphones", Category = "Audio", Price = 299.99m, Description = "Over-ear ANC headphones" },
-        new RedisCache.WebApi.Models.Product { Name = "Portable SSD 1TB", Category = "Storage", Price = 149.99m, Description = "High-speed NVMe SSD" },
-        new RedisCache.WebApi.Models.Product { Name = "Smartphone XL", Category = "Phones", Price = 1099.00m, Description = "Flagship smartphone" },
-        new RedisCache.WebApi.Models.Product { Name = "Tablet 11", Category = "Tablets", Price = 699.00m, Description = "11-inch tablet" },
-        new RedisCache.WebApi.Models.Product { Name = "Gaming Chair", Category = "Furniture", Price = 249.99m, Description = "Ergonomic gaming chair" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Laptop Pro 15", Category = "Computers", Price = 1999.99m, Description = "High-end laptop with 15-inch display" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Mechanical Keyboard", Category = "Accessories", Price = 129.99m, Description = "RGB mechanical keyboard" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Wireless Mouse", Category = "Accessories", Price = 49.99m, Description = "Ergonomic wireless mouse" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "4K Monitor", Category = "Monitors", Price = 399.99m, Description = "27-inch 4K UHD monitor" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "USB-C Hub", Category = "Accessories", Price = 59.99m, Description = "7-in-1 USB-C hub" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Noise Cancelling Headphones", Category = "Audio", Price = 299.99m, Description = "Over-ear ANC headphones" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Portable SSD 1TB", Category = "Storage", Price = 149.99m, Description = "High-speed NVMe SSD" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Smartphone XL", Category = "Phones", Price = 1099.00m, Description = "Flagship smartphone" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Tablet 11", Category = "Tablets", Price = 699.00m, Description = "11-inch tablet" },
+        new RedisCache.WebApi.Models.Product { Id = RedisCache.WebApi.Models.ProductId.New(), Name = "Gaming Chair", Category = "Furniture", Price = 249.99m, Description = "Ergonomic gaming chair" },
     };
 }

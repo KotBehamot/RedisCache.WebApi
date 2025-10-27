@@ -17,5 +17,11 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        // Map ProductId to Guid with value converter
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Id)
+            .HasConversion(
+                id => id.Value,
+                g => new ProductId(g));
     }
 }

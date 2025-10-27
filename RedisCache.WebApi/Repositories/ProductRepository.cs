@@ -21,14 +21,14 @@ public class ProductRepository : IProductRepository
         return await _db.Products.AsNoTracking().OrderBy(p => p.Name).ToListAsync(ct);
     }
 
-    public async Task<Product?> GetByIdAsync(Guid id, CancellationToken ct = default)
+    public async Task<Product?> GetByIdAsync(ProductId id, CancellationToken ct = default)
     {
         return await _db.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id, ct);
     }
 
     public async Task<Product> AddAsync(Product product, CancellationToken ct = default)
     {
-        if (product.Id == Guid.Empty) product.Id = Guid.NewGuid();
+        if (product.Id.IsDefault) product.Id = ProductId.New();
         _db.Products.Add(product);
         await _db.SaveChangesAsync(ct);
         return product;
@@ -46,7 +46,7 @@ public class ProductRepository : IProductRepository
         return true;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
+    public async Task<bool> DeleteAsync(ProductId id, CancellationToken ct = default)
     {
         var existing = await _db.Products.FirstOrDefaultAsync(p => p.Id == id, ct);
         if (existing == null) return false;

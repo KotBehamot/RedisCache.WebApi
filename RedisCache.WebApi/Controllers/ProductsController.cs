@@ -34,10 +34,10 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// Get product by id (cached).
     /// </summary>
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
+    public async Task<IActionResult> GetById([FromRoute] ProductId id, CancellationToken ct)
     {
         var product = await _service.GetByIdAsync(id, ct);
         if (product == null) return NotFound();
@@ -60,10 +60,10 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// Update an existing product (invalidates cache).
     /// </summary>
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(Guid id, [FromBody] Product product, CancellationToken ct)
+    public async Task<IActionResult> Update([FromRoute] ProductId id, [FromBody] Product product, CancellationToken ct)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
         var ok = await _service.UpdateAsync(id, product, ct);
@@ -74,10 +74,10 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// Delete a product (invalidates cache).
     /// </summary>
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    public async Task<IActionResult> Delete([FromRoute] ProductId id, CancellationToken ct)
     {
         var ok = await _service.DeleteAsync(id, ct);
         if (!ok) return NotFound();

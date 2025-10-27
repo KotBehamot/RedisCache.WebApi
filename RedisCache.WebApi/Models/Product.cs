@@ -11,7 +11,7 @@ public class Product
     /// Product identifier.
     /// </summary>
     [Key]
-    public Guid Id { get; set; }
+    public ProductId Id { get; set; }
 
     /// <summary>
     /// Product name.
